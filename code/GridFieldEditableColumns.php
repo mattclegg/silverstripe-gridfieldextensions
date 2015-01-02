@@ -23,6 +23,29 @@ class GridFieldEditableColumns extends GridFieldDataColumns implements
 	 */
 	protected $forms = array();
 
+	/**
+	 * Additional metadata about the column which can be used by other components,
+	 * e.g. to set a title for a search column header.
+	 *
+	 * @param GridField $gridField
+	 * @param string $columnName
+	 * @return array - Map of arbitrary metadata identifiers to their values.
+	 */
+	public function getColumnMetadata($gridField, $column) {
+		$columns = $this->getDisplayFields($gridField);
+
+		$title = $column;
+		if(is_string($columns[$column])) {
+			$title = $columns[$column];
+		} else if(is_array($columns[$column]) && isset($columns[$column]['title'])) {
+			$title = $columns[$column]['title'];
+		}
+
+		return array(
+			'title' => $title,
+		);
+	}
+
 	public function getColumnContent($grid, $record, $col) {
 		if(!$record->canEdit()) {
 			return parent::getColumnContent($grid, $record, $col);
